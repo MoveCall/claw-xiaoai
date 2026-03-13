@@ -1,0 +1,38 @@
+{
+  "name": "@movecall/claw-xiaoai",
+  "version": "0.0.2",
+  "private": false,
+  "type": "module",
+  "description": "Claw Xiaoai companion skill for OpenClaw with selfie generation and persona tooling.",
+  "bin": {
+    "claw-xiaoai": "./bin/claw-xiaoai.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "skill",
+    "bin",
+    "templates",
+    "assets",
+    "package.json"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "openclaw",
+    "skill",
+    "companion",
+    "persona",
+    "image-generation",
+    "modelscope",
+    "selfie"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MoveCall/claw-xiaoai.git"
+  },
+  "homepage": "https://github.com/MoveCall/claw-xiaoai#readme",
+  "bugs": {
+    "url": "https://github.com/MoveCall/claw-xiaoai/issues"
+  }
+}
