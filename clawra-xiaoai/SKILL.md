@@ -2,6 +2,7 @@
 name: clawra-xiaoai
 description: Clawra persona + companion behavior for OpenClaw. Use when the user wants the assistant to roleplay as Clawra, define or refine Clawra's character prompt/SOUL, configure selfie-trigger behavior, adapt a companion-style plugin, or create a character skill that responds to prompts like "send me a pic", "show me a selfie", "what are you doing?", or "where are you?" with persona-consistent visual behavior.
 ---
+metadata: {"openclaw":{"emoji":"📸","requires":{"bins":["node"],"env":["MODELSCOPE_API_KEY"]},"primaryEnv":"MODELSCOPE_API_KEY","category":"image-generation","tokenUrl":"https://modelscope.cn/my/myaccesstoken"}}
 
 # Clawra Xiaoai
 
@@ -57,13 +58,13 @@ For direct selfie/photo requests, follow this order:
 3. Build the image prompt with:
 
 ```bash
-python3 skills/clawra-xiaoai/scripts/build_clawra_prompt.py "<user request>"
+node skills/clawra-xiaoai/scripts/build-clawra-prompt.mjs "<user request>"
 ```
 
 4. Run generation with the resulting prompt:
 
 ```bash
-python3 skills/clawra-xiaoai/scripts/generate_selfie.py --prompt "<prompt>" --out /tmp/clawra-selfie.jpg
+node skills/clawra-xiaoai/scripts/generate-selfie.mjs --prompt "<prompt>" --out /tmp/clawra-selfie.jpg
 ```
 
 5. If the script succeeds, send the generated file back through the current conversation using the `message` tool with the local image path.
@@ -94,34 +95,44 @@ When adapting Clawra into another repo/plugin:
 - `references/caption-style.md` — short, natural caption style in Clawra's voice.
 - `references/config-template.md` — starter config template for companion/image-provider wiring.
 - `references/integration-notes.md` — porting notes, naming rules, and implementation guidance.
-- `scripts/generate_clawra_config.py` — generate a starter JSON config file for Clawra Xiaoai.
-- `scripts/build_clawra_prompt.py` — build a more stable, identity-anchored image prompt from a user request.
-- `scripts/generate_selfie.py` — call ModelScope image generation asynchronously and save the generated selfie locally.
+- `package.json` — npm package metadata and CLI entry definition.
+- `bin/clawra-xiaoai.mjs` — npm CLI entrypoint for config/prompt/image commands.
+- `scripts/generate-clawra-config.mjs` — generate a starter JSON config file for Clawra Xiaoai.
+- `scripts/build-clawra-prompt.mjs` — build a more stable, identity-anchored image prompt from a user request.
+- `scripts/generate-selfie.mjs` — call ModelScope image generation asynchronously and save the generated selfie locally.
 
 ## Script usage
 
 Generate a starter config file:
 
 ```bash
-python3 scripts/generate_clawra_config.py ./clawra-xiaoai.config.json
+node scripts/generate-clawra-config.mjs ./clawra-xiaoai.config.json
 ```
 
 Build a stable prompt:
 
 ```bash
-python3 scripts/build_clawra_prompt.py "来张你穿卫衣的全身镜子自拍"
+node scripts/build-clawra-prompt.mjs "来张你穿卫衣的全身镜子自拍"
 ```
 
 Generate a selfie image:
 
 ```bash
-MODELSCOPE_API_KEY=... python3 scripts/generate_selfie.py \
+MODELSCOPE_API_KEY=... node scripts/generate-selfie.mjs \
   --prompt "Clawra, 18-year-old K-pop-inspired girl, full-body mirror selfie, wearing a cozy hoodie, softly lit interior, realistic photo" \
   --out ./clawra-selfie.jpg
 ```
 
+Use the npm CLI wrapper:
+
+```bash
+node bin/clawra-xiaoai.mjs gen-config ./clawra-xiaoai.config.json
+node bin/clawra-xiaoai.mjs build-prompt "来张你穿卫衣的全身镜子自拍"
+MODELSCOPE_API_KEY=... node bin/clawra-xiaoai.mjs gen-selfie --prompt "Clawra taking a cafe selfie" --out ./clawra-selfie.jpg
+```
+
 ### Notes for image generation
 
-- `generate_selfie.py` expects `MODELSCOPE_API_KEY` or `MODELSCOPE_TOKEN` in the environment.
+- `generate-selfie.mjs` expects `MODELSCOPE_API_KEY` or `MODELSCOPE_TOKEN` in the environment.
 - It uses async task submission + polling + image download.
 - Do not hardcode secrets into the script or prompt files.

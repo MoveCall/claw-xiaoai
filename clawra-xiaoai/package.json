@@ -1,0 +1,13 @@
+{
+  "name": "clawra-xiaoai",
+  "version": "0.0.2",
+  "private": true,
+  "type": "module",
+  "description": "Clawra Xiaoai companion skill for OpenClaw with selfie generation and persona tooling.",
+  "bin": {
+    "clawra-xiaoai": "./bin/clawra-xiaoai.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
