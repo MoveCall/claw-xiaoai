@@ -6,7 +6,21 @@ metadata:
     "openclaw":
       {
         "emoji": "📸",
-        "requires": { "bins": ["node"], "env": ["MODELSCOPE_API_KEY"] },
+        "requires":
+          {
+            "bins": ["node"],
+            "env":
+              [
+                "MODELSCOPE_API_KEY",
+                "MODELSCOPE_TOKEN",
+                "MODELSCOPE_BASE_URL",
+                "MODELSCOPE_IMAGE_MODEL",
+                "MODELSCOPE_POLL_INTERVAL",
+                "MODELSCOPE_MAX_POLLS",
+                "MODELSCOPE_TIMEOUT",
+              ],
+            "config": ["~/.openclaw/openclaw.json"],
+          },
         "primaryEnv": "MODELSCOPE_API_KEY",
         "category": "image-generation",
         "tokenUrl": "https://modelscope.cn/my/myaccesstoken",
@@ -135,5 +149,6 @@ MODELSCOPE_API_KEY=... node scripts/generate-selfie.mjs \
 
 - In OpenClaw, the normal setup is to install the skill and paste the ModelScope key into the skill's `API key` field in the Skills UI.
 - `generate-selfie.mjs` can read that saved key from `~/.openclaw/openclaw.json`; `MODELSCOPE_API_KEY` / `MODELSCOPE_TOKEN` are CLI fallbacks.
+- The local config read is only used to load the Claw Xiaoai skill's own saved ModelScope credential before sending the image-generation request.
 - It uses async task submission + polling + image download.
 - Do not hardcode secrets into the script or prompt files.
