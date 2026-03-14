@@ -105,12 +105,9 @@ When adapting Claw Xiaoai into another repo/plugin:
 - `references/caption-style.md` — short, natural caption style in Claw Xiaoai's voice.
 - `references/config-template.md` — starter config template for companion/image-provider wiring.
 - `references/integration-notes.md` — porting notes, naming rules, and implementation guidance.
-- `../package.json` — npm package metadata and CLI entry definition.
-- `../bin/claw-xiaoai.mjs` — npm CLI entrypoint for config/prompt/image commands.
 - `scripts/generate-claw-xiaoai-config.mjs` — generate a starter JSON config file for Claw Xiaoai.
 - `scripts/build-claw-xiaoai-prompt.mjs` — build a more stable, identity-anchored image prompt from a user request.
 - `scripts/generate-selfie.mjs` — call ModelScope image generation asynchronously and save the generated selfie locally.
-- `../templates/soul-injection.md` — template text for adding Claw Xiaoai capability into SOUL.md.
 
 ## Script usage
 
@@ -132,14 +129,6 @@ Generate a selfie image:
 MODELSCOPE_API_KEY=... node scripts/generate-selfie.mjs \
   --prompt "Claw Xiaoai, 18-year-old K-pop-inspired girl, full-body mirror selfie, wearing a cozy hoodie, softly lit interior, realistic photo" \
   --out ./claw-xiaoai-selfie.jpg
-```
-
-Use the npm CLI wrapper:
-
-```bash
-node ../bin/claw-xiaoai.mjs gen-config ./claw-xiaoai.config.json
-node ../bin/claw-xiaoai.mjs build-prompt "来张你穿卫衣的全身镜子自拍"
-MODELSCOPE_API_KEY=... node ../bin/claw-xiaoai.mjs gen-selfie --prompt "Claw Xiaoai taking a cafe selfie" --out ./claw-xiaoai-selfie.jpg
 ```
 
 ### Notes for image generation
