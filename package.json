@@ -4,6 +4,9 @@
   "private": false,
   "type": "module",
   "description": "Claw Xiaoai companion skill for OpenClaw with selfie generation and persona tooling.",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "claw-xiaoai": "./bin/claw-xiaoai.mjs"
   },
@@ -14,7 +17,6 @@
     "skill",
     "bin",
     "templates",
-    "assets",
     "package.json"
   ],
   "license": "MIT",

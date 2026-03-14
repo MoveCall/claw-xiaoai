@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
 const BASE_URL = process.env.MODELSCOPE_BASE_URL || 'https://api-inference.modelscope.cn/';
@@ -8,6 +9,7 @@ const POLL_INTERVAL = Number(process.env.MODELSCOPE_POLL_INTERVAL || 5) * 1000;
 const MAX_POLLS = Number(process.env.MODELSCOPE_MAX_POLLS || 60);
 const TIMEOUT = Number(process.env.MODELSCOPE_TIMEOUT || 60) * 1000;
 const RETRY_PREFIX = '(young woman, female, same face, same Claw Xiaoai appearance, highly realistic photo, East Asian ethnicity, do not change gender, keep same outfit and same scene)';
+const OPENCLAW_CONFIG_PATH = resolve(process.env.HOME || homedir(), '.openclaw', 'openclaw.json');
 
 function fail(msg, code = 1) { console.error(msg); process.exit(code); }
 function parseArgs(argv) {
@@ -23,9 +25,8 @@ function parseArgs(argv) {
 }
 function readApiKeyFromOpenClawConfig() {
   try {
-    const path = '/root/.openclaw/openclaw.json';
-    if (!existsSync(path)) return undefined;
-    const data = JSON.parse(readFileSync(path, 'utf8'));
+    if (!existsSync(OPENCLAW_CONFIG_PATH)) return undefined;
+    const data = JSON.parse(readFileSync(OPENCLAW_CONFIG_PATH, 'utf8'));
     const entry = data?.skills?.entries?.['claw-xiaoai'];
     if (entry && typeof entry.apiKey === 'string' && entry.apiKey.trim()) return entry.apiKey.trim();
     if (entry?.env?.MODELSCOPE_API_KEY) return String(entry.env.MODELSCOPE_API_KEY).trim();
@@ -67,7 +68,7 @@ async function generate(prompt, apiKey) {
 const args = parseArgs(process.argv.slice(2));
 if (!args.prompt) fail('Usage: generate-selfie.mjs --prompt <text> --out <file> [--json] [--retry N]');
 const apiKey = process.env.MODELSCOPE_API_KEY || process.env.MODELSCOPE_TOKEN || readApiKeyFromOpenClawConfig();
-if (!apiKey) fail('MODELSCOPE_API_KEY / MODELSCOPE_TOKEN is required, or configure skills.entries.claw-xiaoai.apiKey in ~/.openclaw/openclaw.json.');
+if (!apiKey) fail('MODELSCOPE_API_KEY / MODELSCOPE_TOKEN is required, or save the skill API key in OpenClaw Skills so it is written to ~/.openclaw/openclaw.json.');
 const outPath = resolve(args.out || './claw-xiaoai-selfie.jpg');
 let err;
 for (let attempt = 1; attempt <= Math.max(1, args.retry); attempt++) {

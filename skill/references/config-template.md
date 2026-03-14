@@ -29,6 +29,7 @@ Use this as a starting point when wiring Claw Xiaoai into a companion/image-gene
 
 ## Notes
 
+- In OpenClaw, prefer saving the ModelScope key in the installed skill's `API key` field instead of hardcoding it into project files.
 - Keep API keys in environment variables or secret storage when possible.
 - Use `proactiveSelfie.probability` conservatively; `0.1`–`0.3` is usually enough.
 - If the host plugin supports multiple agents, prefer per-agent overrides instead of one global persona state.
