@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { loadModelScopeRuntime } from './load-modelscope-runtime.mjs';
 
 const RETRY_PREFIX = '(young woman, female, same face, same Claw Xiaoai appearance, highly realistic photo, East Asian ethnicity, do not change gender, keep same outfit and same scene)';
 
 function fail(msg, code = 1) { console.error(msg); process.exit(code); }
+async function readStdinText() {
+  const chunks = [];
+  for await (const chunk of process.stdin) chunks.push(chunk);
+  return Buffer.concat(chunks.map((chunk) => Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))).toString('utf8').trim();
+}
 function parseArgs(argv) {
   const out = { json: false, retry: 1 };
   for (let i = 0; i < argv.length; i++) {
@@ -51,7 +56,7 @@ async function generate(prompt, runtime) {
 }
 
 const args = parseArgs(process.argv.slice(2));
-if (args.promptStdin) args.prompt = args.prompt || readFileSync(0, 'utf8').trim();
+if (args.promptStdin) args.prompt = args.prompt || await readStdinText();
 if (!args.prompt) fail('Usage: generate-selfie.mjs --prompt <text> --out <file> [--json] [--retry N]');
 const runtime = loadModelScopeRuntime();
 if (!runtime.apiKey) fail('MODELSCOPE_API_KEY / MODELSCOPE_TOKEN is required, or save the skill API key in OpenClaw Skills so it is written to ~/.openclaw/openclaw.json.');
