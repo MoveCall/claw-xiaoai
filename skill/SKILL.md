@@ -73,13 +73,13 @@ For direct selfie/photo requests, follow this order:
 3. Build the image prompt with:
 
 ```bash
-node scripts/build-claw-xiaoai-prompt.mjs "<user request>"
+printf '%s' "<user request>" | node scripts/build-claw-xiaoai-prompt.mjs --stdin
 ```
 
 4. Run generation with the resulting prompt:
 
 ```bash
-node scripts/generate-selfie.mjs --prompt "<prompt>" --out /tmp/claw-xiaoai-selfie.jpg
+printf '%s' "<prompt>" | node scripts/generate-selfie.mjs --prompt-stdin --out /tmp/claw-xiaoai-selfie.jpg
 ```
 
 5. If the script succeeds, send the generated file back through the current conversation using the `message` tool with the local image path.
@@ -125,14 +125,15 @@ node scripts/generate-claw-xiaoai-config.mjs ./claw-xiaoai.config.json
 Build a stable prompt:
 
 ```bash
-node scripts/build-claw-xiaoai-prompt.mjs "来张你穿卫衣的全身镜子自拍"
+printf '%s' "来张你穿卫衣的全身镜子自拍" | node scripts/build-claw-xiaoai-prompt.mjs --stdin
 ```
 
 Generate a selfie image:
 
 ```bash
+printf '%s' "Claw Xiaoai, 18-year-old K-pop-inspired girl, full-body mirror selfie, wearing a cozy hoodie, softly lit interior, realistic photo" | \
 MODELSCOPE_API_KEY=... node scripts/generate-selfie.mjs \
-  --prompt "Claw Xiaoai, 18-year-old K-pop-inspired girl, full-body mirror selfie, wearing a cozy hoodie, softly lit interior, realistic photo" \
+  --prompt-stdin \
   --out ./claw-xiaoai-selfie.jpg
 ```
 
@@ -141,5 +142,6 @@ MODELSCOPE_API_KEY=... node scripts/generate-selfie.mjs \
 - In OpenClaw, the normal setup is to install the skill and paste the ModelScope key into the skill's `API key` field in the Skills UI.
 - `generate-selfie.mjs` can read that saved key from `~/.openclaw/openclaw.json`; `MODELSCOPE_API_KEY` / `MODELSCOPE_TOKEN` are CLI fallbacks.
 - The local config read is only used to load the Claw Xiaoai skill's own saved ModelScope credential before sending the image-generation request.
+- Avoid interpolating raw user text directly into shell snippets; prefer stdin-based script input when wiring the skill into another host.
 - It uses async task submission + polling + image download.
 - Do not hardcode secrets into the script or prompt files.

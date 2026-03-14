@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { detectSceneTag } from './claw-xiaoai-request-rules.mjs';
+import { readFileSync } from 'node:fs';
 
 function timeSlot(hour) {
   if (hour >= 8 && hour < 10) return 'morning';
@@ -21,7 +22,10 @@ const now = new Intl.DateTimeFormat('en-GB', {
 }).format(new Date());
 
 const slot = timeSlot(Number(now));
-const request = process.argv.slice(2).join(' ').trim();
+const argv = process.argv.slice(2);
+const useStdin = argv.includes('--stdin');
+const requestParts = argv.filter((arg) => arg !== '--stdin');
+const request = (useStdin ? readFileSync(0, 'utf8') : requestParts.join(' ')).trim();
 
 const sceneCaptions = {
   relative: [

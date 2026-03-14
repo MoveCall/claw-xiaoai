@@ -86,4 +86,27 @@ function buildPrompt(request, mode, state){
   return { prompt, mode, state: nextState, slotInfo, preset };
 }
 
-const argv=process.argv.slice(2); let json=false,save=true,forcedMode; const requestParts=[]; for(let i=0;i<argv.length;i++){ const a=argv[i]; if(a==='--json') json=true; else if(a==='--no-save') save=false; else if(a==='--mode') forcedMode=argv[++i]; else requestParts.push(a);} const request=requestParts.join(' ').trim(); if(!request){ console.error('Usage: build-claw-xiaoai-prompt <request> [--mode direct|mirror] [--json] [--no-save]'); process.exit(1);} const prev=loadState(); const mode=forcedMode || inferMode(request, prev); const result=buildPrompt(request,mode,prev); if(save) saveState(result.state); if(json) console.log(JSON.stringify(result,null,2)); else console.log(result.prompt);
+const argv=process.argv.slice(2);
+let json=false,save=true,forcedMode,useStdin=false;
+const requestParts=[];
+for(let i=0;i<argv.length;i++){
+  const a=argv[i];
+  if(a==='--json') json=true;
+  else if(a==='--no-save') save=false;
+  else if(a==='--stdin') useStdin=true;
+  else if(a==='--mode') forcedMode=argv[++i];
+  else requestParts.push(a);
+}
+
+const request=(useStdin ? readFileSync(0,'utf8') : requestParts.join(' ')).trim();
+if(!request){
+  console.error('Usage: build-claw-xiaoai-prompt <request> [--mode direct|mirror] [--json] [--no-save] [--stdin]');
+  process.exit(1);
+}
+
+const prev=loadState();
+const mode=forcedMode || inferMode(request, prev);
+const result=buildPrompt(request,mode,prev);
+if(save) saveState(result.state);
+if(json) console.log(JSON.stringify(result,null,2));
+else console.log(result.prompt);

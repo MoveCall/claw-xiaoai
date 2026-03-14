@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { loadModelScopeRuntime } from './load-modelscope-runtime.mjs';
 
@@ -11,6 +11,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--json') out.json = true;
+    else if (a === '--prompt-stdin') out.promptStdin = true;
     else if (a === '--prompt') out.prompt = argv[++i];
     else if (a === '--out') out.out = argv[++i];
     else if (a === '--retry') out.retry = Number(argv[++i] || 1);
@@ -50,6 +51,7 @@ async function generate(prompt, runtime) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+if (args.promptStdin) args.prompt = args.prompt || readFileSync(0, 'utf8').trim();
 if (!args.prompt) fail('Usage: generate-selfie.mjs --prompt <text> --out <file> [--json] [--retry N]');
 const runtime = loadModelScopeRuntime();
 if (!runtime.apiKey) fail('MODELSCOPE_API_KEY / MODELSCOPE_TOKEN is required, or save the skill API key in OpenClaw Skills so it is written to ~/.openclaw/openclaw.json.');
