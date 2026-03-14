@@ -9,9 +9,15 @@ npx @movecall/claw-xiaoai
 ```
 
 The installer will:
-- copy the skill into `~/.openclaw/skills/claw-xiaoai`
+- copy the skill into `~/.openclaw/workspace/skills/claw-xiaoai`
 - inject the Claw Xiaoai capability block into `~/.openclaw/workspace/SOUL.md`
 - remind you to open OpenClaw and save the ModelScope key in the skill's `API key` field
+
+By default this follows the Workspace Skills model. If you want the shared Installed Skills location instead, run:
+
+```bash
+npx @movecall/claw-xiaoai install --managed
+```
 
 ## Install in OpenClaw
 
@@ -26,6 +32,8 @@ If you are testing the scripts outside OpenClaw, you can still use `MODELSCOPE_A
 
 ```bash
 npx @movecall/claw-xiaoai install
+npx @movecall/claw-xiaoai install --managed
+npx @movecall/claw-xiaoai install --workspace /path/to/workspace
 npx @movecall/claw-xiaoai build-prompt "来张咖啡店自拍"
 npx @movecall/claw-xiaoai gen-caption "来张你穿卫衣的全身镜子自拍"
 ```
