@@ -9,16 +9,7 @@ metadata:
         "requires":
           {
             "bins": ["node"],
-            "env":
-              [
-                "MODELSCOPE_API_KEY",
-                "MODELSCOPE_TOKEN",
-                "MODELSCOPE_BASE_URL",
-                "MODELSCOPE_IMAGE_MODEL",
-                "MODELSCOPE_POLL_INTERVAL",
-                "MODELSCOPE_MAX_POLLS",
-                "MODELSCOPE_TIMEOUT",
-              ],
+            "env": ["MODELSCOPE_API_KEY", "MODELSCOPE_TOKEN"],
             "config": ["~/.openclaw/openclaw.json"],
           },
         "primaryEnv": "MODELSCOPE_API_KEY",

@@ -7,7 +7,7 @@ Use this as a starting point when wiring Claw Xiaoai into a companion/image-gene
   "selectedCharacter": "claw-xiaoai",
   "defaultProvider": "modelscope",
   "proactiveSelfie": {
-    "enabled": true,
+    "enabled": false,
     "probability": 0.1
   },
   "providers": {

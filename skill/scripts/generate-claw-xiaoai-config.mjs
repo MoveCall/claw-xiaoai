@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 const DEFAULT = {
   selectedCharacter: 'claw-xiaoai',
   defaultProvider: 'modelscope',
-  proactiveSelfie: { enabled: true, probability: 0.1 },
+  proactiveSelfie: { enabled: false, probability: 0.1 },
   providers: {
     modelscope: {
       apiKey: '${MODELSCOPE_API_KEY}',
